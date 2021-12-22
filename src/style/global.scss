@@ -1,0 +1,56 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	border: none;
+}
+html,
+body {
+	width: 100%;
+	height: 100%;
+	/* 至关重要，谜一样 */
+	overflow-x: hidden;
+}
+html {
+	font-size: 10px;
+	line-height: 1.8;
+	counter-reset: imgNum;
+	counter-reset: singerImgNum;
+	color: #444444;
+}
+body {
+	overflow-y: scroll;
+	background-color: #f4efec;
+	border-top: 5px solid #00355a;
+}
+::-webkit-scrollbar {
+	//滚动条整体样式
+	-webkit-appearance: none;
+	width: 6px; /*高宽分别对应横竖滚动条的尺寸*/
+	height: 1px;
+}
+::-webkit-scrollbar-thumb {
+	//滚动条里面小方块
+	border-radius: 3px;
+	box-shadow: inset 0 0 5px rgba(145, 137, 137, 0.2);
+	background: #b5b5b5;
+}
+::-webkit-scrollbar-track {
+	/*滚动条里面轨道*/
+	box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+	border-radius: 3px;
+	background: #ededed;
+}
+
+body {
+	padding-right: -17px;
+}
+$--colsNum-5: repeat(5, 1fr);
+$--colsNum-4: repeat(4, 1fr);
+$--colsNum-3: repeat(3, 1fr);
+$--colsNum-2: repeat(2, 1fr);
+$--colsNum-1: 1fr;
+
+$--albumnContainerWidth: 300px;
+$--albumnCoverWidth: 160px;
+$--albumnCDWidth: 60px;
