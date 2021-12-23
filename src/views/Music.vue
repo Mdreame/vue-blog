@@ -9,6 +9,9 @@ export default {
 mounted(){
   console.log("music");
   
+},
+destroyed(){
+  console.log("music destroyed");
 }
 }
 </script>

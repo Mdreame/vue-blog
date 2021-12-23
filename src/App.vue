@@ -4,8 +4,28 @@
 		<Header :class="toggle ? 'show' : 'hide'"> </Header>
 		<main class="showScrollBar" :class="toggle ? '' : 'normal-body'">
 			<!-- 页面组件 -->
-			<router-view :info="info"></router-view>
+			<div>
+				<router-view></router-view>
+			</div>
 		</main>
+		<button v-show="isShow" class="btn-backtop" @click="toTop">
+			<svg
+				t="1640231003357"
+				class="icon"
+				viewBox="0 0 1824 1024"
+				version="1.1"
+				xmlns="http://www.w3.org/2000/svg"
+				p-id="3643"
+				width="32"
+				height="32"
+			>
+				<path
+					d="M0 911.607042 911.607042 0l911.607042 911.607042-112.392958 112.392958L911.607042 224.901647 112.392958 1024 0 911.607042z"
+					p-id="3644"
+					fill="#e6e6e6"
+				></path>
+			</svg>
+		</button>
 		<button class="toggle-btn" @click="toggle = !toggle">
 			<svg
 				t="1611836175556"
@@ -29,7 +49,7 @@
 
 <script>
 import Header from "./components/Header";
-import axios from "axios";
+// import axios from "axios";
 
 export default {
 	name: "App",
@@ -39,25 +59,38 @@ export default {
 			info: null,
 			loading: true,
 			errored: false,
+			topOffset: 0,
+			isShow: false,
 		};
 	},
 
 	components: {
 		Header,
 	},
+	methods: {
+		//屏幕超出200显示回到顶部按钮
+		showToTopBtn() {
+			this.topOffset =
+				document.body.scrollTop ||
+				document.documentElement.scrollTop ||
+				0;
+			if (this.topOffset > 400) {
+				this.isShow = true;
+			} else {
+				this.isShow = false;
+			}
+		},
+		// 回到顶部
+		toTop() {
+			document.body.scrollTo({ top: 0, behavior: "smooth" });
+		},
+	},
 	mounted() {
-		console.log("axios...");
-
-		axios
-			.get("http://localhost:3000/hi")
-			.then((res) => {
-				let data = res.data[0];
-				console.log(
-					`收到文件${data.name}.${data.type},访问点击${data.url}`
-				);
-			})
-			.catch((error) => console.log(error))
-			.finally(() => (this.loading = false));
+		//加上true才有用
+		window.addEventListener("scroll", this.showToTopBtn, true);
+	},
+	destroyed() {
+		console.log("destroyed");
 	},
 };
 </script>
@@ -88,17 +121,15 @@ main {
 	margin: 0 auto;
 	transition: all 0.6s ease 0s;
 }
-
-.toggle-btn {
+@mixin btn {
 	display: block;
 	outline: none;
 	border: none;
 	cursor: pointer;
 }
-.toggle-btn svg {
+@mixin btn-svg {
 	position: fixed;
 	left: -4px;
-	bottom: 8%;
 	z-index: 2;
 	background-color: rgb(47, 43, 43);
 	color: rgb(255, 255, 255);
@@ -108,8 +139,26 @@ main {
 	padding: 8px;
 }
 
+.toggle-btn {
+	@include btn;
+
+	svg {
+		@include btn-svg;
+		bottom: 8%;
+	}
+}
+
+.btn-backtop {
+	@include btn;
+
+	svg {
+		@include btn-svg;
+		bottom: 14%;
+	}
+}
+
 .hide {
-	left: -16%;
+	left: -80px;
 	transition: all 0.6s ease 0s;
 }
 .show {

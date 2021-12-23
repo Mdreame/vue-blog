@@ -5,6 +5,7 @@ import Life from "../views/Life";
 import Book from "../views/Book";
 import Movie from "../views/Movie";
 import Music from "../views/Music";
+import TechBlog from "../views/partial/TechBlog";
 
 export default new VueRouter({
 	routes: [
@@ -15,6 +16,7 @@ export default new VueRouter({
 		{
 			path: "/home",
 			component: Home,
+			
 		},
 		{
 			path: "/about",
@@ -36,5 +38,9 @@ export default new VueRouter({
 			path: "/music",
 			component: Music,
 		},
+		{
+			path: "/home/techBlog",
+			component: TechBlog,
+		}
 	],
 });

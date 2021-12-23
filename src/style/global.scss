@@ -1,8 +1,11 @@
+$text-color: #444;
+
 * {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
 	border: none;
+	color: $text-color;
 }
 html,
 body {
@@ -19,7 +22,8 @@ html {
 	color: #444444;
 }
 body {
-	overflow-y: scroll;
+	// 是否始终显示滚动条
+	// overflow-y: scroll;
 	background-color: #f4efec;
 	border-top: 5px solid #00355a;
 }
@@ -42,9 +46,7 @@ body {
 	background: #ededed;
 }
 
-body {
-	padding-right: -17px;
-}
+
 $--colsNum-5: repeat(5, 1fr);
 $--colsNum-4: repeat(4, 1fr);
 $--colsNum-3: repeat(3, 1fr);
@@ -54,3 +56,7 @@ $--colsNum-1: 1fr;
 $--albumnContainerWidth: 300px;
 $--albumnCoverWidth: 160px;
 $--albumnCDWidth: 60px;
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 400;
+}
