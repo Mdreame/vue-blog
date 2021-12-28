@@ -1,6 +1,7 @@
 // 初始化样式
 import "normalize.css";
 import "./style/global.scss"
+import 'github-markdown-css/github-markdown.css'
 
 import Vue from "vue";
 import App from "./App.vue";

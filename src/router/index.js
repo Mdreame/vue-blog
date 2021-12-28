@@ -6,6 +6,7 @@ import Book from "../views/Book";
 import Movie from "../views/Movie";
 import Music from "../views/Music";
 import TechBlogContent from "../views/partial/TechBlogContent";
+import BookContent from "../views/partial/BookContent";
 
 
 export default new VueRouter({
@@ -61,6 +62,15 @@ export default new VueRouter({
 		{
 			path: "/home/:id",
 			component: TechBlogContent,
+			props: true,
+			meta:{
+				keepAlive: false
+			}
+		},
+		{
+			path: "/book/:id",
+			component: BookContent,
+			// 会直接挂到Vue实例属性，即$attrs上
 			props: true,
 			meta:{
 				keepAlive: false

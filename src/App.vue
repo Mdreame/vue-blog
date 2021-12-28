@@ -51,7 +51,6 @@
 
 <script>
 import Header from "./components/Header";
-// import axios from "axios";
 
 export default {
 	name: "App",
@@ -121,6 +120,7 @@ export default {
 main {
 	padding: 2rem 4rem 5rem 12rem;
 	margin: 0 auto;
+	max-width: 1024px;
 	transition: all 0.6s ease 0s;
 }
 @mixin btn {

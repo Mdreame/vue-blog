@@ -2,12 +2,16 @@
 	<div>
 		<!-- 统计 -->
 		<div class="blog-total">
-			<!-- Posts - {{ this.total }} -->
-			最新
-			<span class="achrive">归档</span>
+			<span :class="isActive ? 'active' : ''" @click="toggle">最新</span>
+			<span
+				class="achrive"
+				:class="isActive ? '' : 'active'"
+				@click="toggle"
+				>归档</span
+			>
 		</div>
 		<!-- 文章列表 -->
-		<ul class="blog-container">
+		<ul v-show="isActive" class="blog-container">
 			<li
 				class="blog-item"
 				v-for="techBlog in techBlogs"
@@ -24,21 +28,28 @@
 						<span>{{ transTime(techBlog.createdAt) }}</span>
 					</h3>
 				</router-link>
-
-				<!-- <div>{{ getBookList }}</div> -->
 				<p class="blog-description">{{ techBlog.description }}</p>
 			</li>
 		</ul>
-		<!-- <router-view></router-view> -->
+
+		<ul v-show="!isActive" class="archive-blog-container">
+			<li
+				class="blog-item"
+				v-for="techBlog in techBlogs"
+				:key="techBlog.id"
+			>
+				<router-link :to="`/home/${techBlog.id}`">
+					<h3 class="blog-title">
+						<span>{{ transTime(techBlog.createdAt) }}</span>
+						{{ techBlog.name }}
+					</h3>
+				</router-link>
+			</li>
+		</ul>
 	</div>
 </template>
 
 <script>
-// import axios from "axios";
-// import gql from "graphql-tag";
-
-// import TechBlogList from "./partial/TechBlogList.vue";
-
 const getBlogList = `{
 	getBlogList{
     	id
@@ -52,83 +63,66 @@ export default {
 	data() {
 		return {
 			total: 0,
-			time: "",
 			techBlogs: [],
+			isActive: false,
+			ArchiveDate: [],
 		};
 	},
-
-	// apollo: {
-	// 	getBookList: gql`
-	// 		{
-	// 			getBookList {
-	// 				name
-	// 			}
-	// 		}
-	// 	`
-	// },
 	methods: {
-		// toArticle(blogId) {
-		// 	console.log(blogId);
-		// 	this.$router.push({
-		// 		path: `${this.currentPath}/techBlog`,
-		// 		query: { blogId: blogId },
-		// 	});
-		// 	console.log(this.$router);
-		// 	console.log(this.$route);
-		// },
-		tolog(a) {
-			console.log(a);
-		},
 		transTime(time) {
 			return this.$moment(new Date(Number(time))).format("YYYY-MM-DD");
+		},
+		toggle() {
+			this.isActive = !this.isActive;
 		},
 	},
 	mounted() {
 		this.$axios({
-			url: `http://localhost:9000/graphql/`, // 后端的接口地址
+			url: `https://mdreame.life/graphql`, // 后端的接口地址
 			method: "get",
-			params: {
-				query: getBlogList,
-			},
+			params: { query: getBlogList },
 			dataType: "json",
 		})
 			.then((res) => {
-				console.log(
-					"data:",
-					res.data.data,
-					"type",
-					typeof res.data.data
-				);
 				this.techBlogs = res.data.data.getBlogList;
-				console.log("请求成功：", this.techBlogs);
-
 				this.total =
 					this.techBlogs.length > 0 ? this.techBlogs.length : 0;
-				// console.log(this.techBlogs);
 			})
-			.catch((error) => console.log(error))
-			.finally(() => (this.loading = false));
-
-		console.log(this.$moment);
+			.catch((error) => console.log(error));
 	},
 };
 </script>
 
 <style lang="scss" scoped>
+
+
 .blog-total {
 	margin-bottom: 2rem;
-	border-bottom: 1px solid rgb(145, 137, 137);
+	border-bottom: 2px solid #c1c1c1;
 	font-weight: 500;
-	// border-right: 2px solid rgb(145, 137, 137,0.5);
-	padding: 0 4px;
 	line-height: 1.5;
 	letter-spacing: 2px;
+	display: flex;
+	justify-content: space-between;
+
+	span {
+		cursor: pointer;
+	}
 
 	.achrive {
 		float: right;
-		color: #21718d;
-		// border-left: 2px solid rgb(145, 137, 137,0.5);
 		margin-left: 4px;
+	}
+	.active {
+		color: #21718d;
+		font-weight: 600;
+	}
+	.active::after {
+		display: block;
+		position: relative;
+		bottom: -2px;
+		border-bottom: 2px solid #00355a;
+		content: "";
 	}
 }
 .blog-container {
@@ -138,7 +132,12 @@ export default {
 .blog-item {
 	list-style: none;
 	margin-bottom: 1.2rem;
+	padding: 0 0.8rem;
+	border-radius: 0.5rem;
 
+	&:hover {
+		background-color: #e7dede;
+	}
 	a {
 		text-decoration: none;
 		&:hover {
@@ -162,6 +161,41 @@ export default {
 		font-size: 1.4rem;
 		color: rgb(85, 85, 85);
 		text-align: justify;
+	}
+}
+
+.archive-blog-container {
+	// border-left: 1px solid #999;
+	.blog-item {
+		margin-bottom: 0.5rem;
+		position: relative;
+		padding-left: 2rem;
+
+		&:not(:last-child)::before{
+			content: "";
+			width: 8px;
+			height: 36px;
+			border-right: 1px solid #999;
+			position: absolute;
+			left: 0px;
+			top: 50%;
+			margin-top: -4px;
+		}
+
+		&::after {
+			content: "";
+			width: 8px;
+			height: 8px;
+			border-radius: 8px;
+			background-color: #98a7b1;
+			position: absolute;
+			left: 4px;
+			top: 50%;
+			margin-top: -4px;
+		}
+		.blog-title {
+			font-size: 1.6rem;
+		}
 	}
 }
 </style>

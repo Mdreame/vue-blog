@@ -1,0 +1,33 @@
+
+.markdown-body {
+	background-color: transparent;
+
+	h1,h2,h3,h4,h5,h6 {
+		font-weight: 400;
+	}
+	h2{
+		font-size: 2rem;
+	}
+
+	.highlight pre {
+		background-color: #e1e1e1;
+	}
+	pre {
+		background-color: #e1e1e1;
+	}
+	a {
+		color: #859ebb;
+	}
+	hr{
+		margin: 0;
+	}
+
+    .bookContent {
+        p:first-child:first-letter {
+            font-size: 3.2rem;
+            float: left;
+            margin: 0.5rem 1rem;
+            line-height: 1;
+        }
+    }
+}

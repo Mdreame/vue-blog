@@ -1,32 +1,36 @@
 <template>
-	<div>
-		<h1>{{ name }}</h1>
-		<p>{{ category }}</p>
-		<p>{{ description }}</p>
-		<p>{{ createdAt }}</p>
-		<VueMarkdown :source="blogContent"></VueMarkdown>
+	<div v-cloak>
+		<h1 class="title">{{ name }}</h1>
+		<p class="title-detail" v-cloak>
+			<span>分类：<span class="category">{{ category }}</span></span
+			><span class="createdAt">{{ transTime(createdAt) }}</span>
+		</p>
+		<div class="markdown-body">
+			<VueMarkdown :source="blogContent"></VueMarkdown>
+		</div>
 	</div>
 </template>
 
 <script>
-import VueMarkdown from 'vue-markdown'
+import VueMarkdown from "vue-markdown";
+import "../../style/markdown.scss";
+
 export default {
 	name: "TechBlog",
-	props: ["content"],
-	components:{VueMarkdown},
+	components: { VueMarkdown },
 	data() {
 		return {
 			name: "",
 			category: "",
 			description: "",
 			createdAt: "",
-			blogContent: ""
+			blogContent: "",
 		};
 	},
 	methods: {
 		getBlogById(id) {
 			this.$axios({
-				url: `http://localhost:9000/graphql/`, // 后端的接口地址
+				url: `https://mdreame.life/graphql`, // 后端的接口地址
 				method: "get",
 				params: {
 					query: `{
@@ -56,22 +60,41 @@ export default {
 				.catch((error) => console.log(error))
 				.finally(() => (this.loading = false));
 		},
-	},
-	created() {
-		// console.log("from Techblog", this.$attrs.id);
-		this.getBlogById(this.$attrs.id);
-		// console.log("from Techblog", this.$attrs.id);
-
-		// console.log("created");
+		transTime(time) {
+			return this.$moment(new Date(Number(time))).format(
+				"YYYY-MM-DD HH:MM"
+			);
+		},
 	},
 	mounted() {
-		// console.log(1);
-		// this.getBlogById(this.$attrs.id)
+		console.log(this);
+		
+		this.getBlogById(this.$attrs.id);
 	},
-	activated() {
-		// console.log("from Techblog", this.$attrs.id);
-	},
+
 };
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+[v-cloak] {
+	display: none !important;
+}
+
+.title {
+	font-size: 3rem;
+	margin: 0 0 0.5rem;
+}
+.title-detail {
+	display: flex;
+	justify-content: space-between;
+	font-size: 1.4rem;
+	margin-bottom: 2rem;
+}
+.createdAt {
+	color: rgb(160, 147, 147);
+	font-style: italic;
+}
+.category {
+	background-color: #fff;
+}
+</style>
