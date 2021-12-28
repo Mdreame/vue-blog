@@ -4,9 +4,11 @@
 		<Header :class="toggle ? 'show' : 'hide'"> </Header>
 		<main class="showScrollBar" :class="toggle ? '' : 'normal-body'">
 			<!-- 页面组件 -->
-			<div>
-				<router-view></router-view>
-			</div>
+        <!-- 保证页面不重新刷新 -->
+				<keep-alive>
+					<router-view v-if="$route.meta.keepAlive"></router-view>
+				</keep-alive>
+					<router-view v-if="!$route.meta.keepAlive"></router-view>
 		</main>
 		<button v-show="isShow" class="btn-backtop" @click="toTop">
 			<svg
@@ -117,7 +119,7 @@ export default {
 	padding: 2rem 0;
 }
 main {
-	padding: 4rem 4rem 5rem 12rem;
+	padding: 2rem 4rem 5rem 12rem;
 	margin: 0 auto;
 	transition: all 0.6s ease 0s;
 }
@@ -166,7 +168,7 @@ main {
 	transition: all 0.6s ease 0s;
 }
 .normal-body {
-	padding: 4rem;
+	padding: 2rem 4rem 4rem 4rem;
 	left: 0;
 }
 </style>
