@@ -5,7 +5,7 @@
 				<span>{{ tag }}</span>
 			</router-link>
 		</li>
-		<span class="alltags">所有标签</span>
+		<router-link to="/alltags" class="alltags">所有标签</router-link>
 	</ul>
 </template>
 
@@ -63,6 +63,10 @@ export default {
 			color: rgb(150, 170, 197);
 			background-color: rgb(255, 255, 255);
 		}
+	}
+
+	a {
+		text-decoration: none;
 	}
 }
 </style>
