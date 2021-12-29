@@ -8,8 +8,8 @@
 				class="css-1j5kdlv-BookItem e7sta0n6"
 			>
 				<div>
-                    <!-- router-link :to="`/home/${techBlog.id}`" -->
-					<router-link :to="`/book/${book.id}`" 
+					<!-- router-link :to="`/home/${techBlog.id}`" -->
+					<router-link :to="`/book/${book.id}`"
 						><img
 							:src="book.coverUrl"
 							:alt="book.name"
@@ -21,7 +21,7 @@
 							><h4 class="css-1vc8y3g-BookName e7sta0n3">
 								{{ book.name }}
 							</h4>
-                        </router-link>
+						</router-link>
 						<p class="author">{{ book.author.name }}</p>
 						<p class="book-category">{{ book.classify }}</p>
 					</div>
@@ -60,6 +60,8 @@ export default {
 		};
 	},
 	mounted() {
+		console.log("store:", this.$store.state);
+
 		this.$axios({
 			url: `http://localhost:9000/graphql`, // 后端的接口地址
 			method: "get",

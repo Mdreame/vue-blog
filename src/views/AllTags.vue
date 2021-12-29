@@ -14,12 +14,12 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .title {
 	font-weight: 600;
 	color: rgb(78, 110, 111);
 }
 ul {
-	margin-top: 2rem;
+	margin-top: 1.2rem;
 }
 </style>

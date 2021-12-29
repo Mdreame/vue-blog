@@ -8,6 +8,7 @@ import Music from "../views/Music";
 import TechBlogContent from "../views/partial/TechBlogContent";
 import BookContent from "../views/partial/BookContent";
 import AllTags from "../views/AllTags";
+import SameTag from "../views/partial/SameTag";
 
 export default new VueRouter({
 	mode: "history",
@@ -80,6 +81,14 @@ export default new VueRouter({
 			component: AllTags,
 			meta: {
 				keepAlive: true,
+			},
+		},
+		{
+			path: "/alltags/:tag",
+			component: SameTag,
+			props:true,
+			meta: {
+				keepAlive: false,
 			},
 		},
 	],

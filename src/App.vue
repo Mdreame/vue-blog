@@ -89,6 +89,8 @@ export default {
 	mounted() {
 		//加上true才有用
 		window.addEventListener("scroll", this.showToTopBtn, true);
+
+		
 	},
 	destroyed() {
 		console.log("destroyed");
@@ -97,19 +99,6 @@ export default {
 </script>
 
 <style lang="scss">
-/* body::after {
-  position: absolute;
-  top: 0;
-  content: "";
-  display: block;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  right: 0;
-  opacity: 0.1;
-  bottom: 0;
-  z-index: -1;
-} */
 #app {
 	min-width: 360px;
 	font-size: 16px;

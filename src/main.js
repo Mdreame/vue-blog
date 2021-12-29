@@ -4,6 +4,7 @@ import "./style/global.scss"
 import 'github-markdown-css/github-markdown.css'
 
 import Vue from "vue";
+import store from "./store/"
 import App from "./App.vue";
 import VueRouter from "vue-router";
 import router from "./router";
@@ -27,4 +28,5 @@ new Vue({
 	el: "#app",
 	render: (h) => h(App),
 	router: router,
+	store,
 });

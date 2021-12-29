@@ -1,7 +1,7 @@
 <template>
 	<ul class="tag-list">
 		<li v-for="(tag, index) in tags" :key="index" class="tag-item">
-			<router-link :to="`/home/tag`">
+			<router-link :to="`/alltags/${tag}`">
 				<span>{{ tag }}</span>
 			</router-link>
 		</li>
