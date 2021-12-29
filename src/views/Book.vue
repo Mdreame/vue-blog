@@ -10,10 +10,6 @@ export default {
 	components: {
 		Booklist,
 	},
-	mounted(){
-  console.log("book");
-  
-}
 };
 </script>
 

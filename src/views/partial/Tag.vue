@@ -1,17 +1,44 @@
 <template>
 	<ul class="tag-list">
-		<li v-for="(tag, index) in tags" :key="index" class="tag-item">
-			<router-link :to="`/alltags/${tag}`">
-				<span>{{ tag }}</span>
+		<router-link to="/alltags" class="alltags">所有标签</router-link>
+		<li
+			v-for="(tag, value) in tags"
+			:key="value"
+            @click="toSameTag(tag, value)"
+			class="tag-item"
+		>
+			<router-link :to="`/alltags/${value}`">
+				<span>{{ value }}</span>
 			</router-link>
 		</li>
-		<router-link to="/alltags" class="alltags">所有标签</router-link>
 	</ul>
 </template>
 
 <script>
 export default {
-	props: ["tags"],
+	data() {
+		return {
+			tags: [],
+		};
+	},
+	props: ["allTags"],
+	methods: {
+		updateData(newValue) {
+			console.log("开始更新");
+			this.tags = newValue;
+		},
+        toSameTag(sameTagObjs , tagName){
+            this.$bus.$emit("checkSameTag",sameTagObjs ,tagName)
+            
+        }
+	},
+	created() {
+		console.log("Tag.vue created");
+		this.$bus.$on("deliver", this.updateData);
+	},
+	mounted() {
+		console.log("Tag.vue mounted", this.$store.state.allTagObjs);
+	},
 };
 </script>
 

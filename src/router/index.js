@@ -10,7 +10,7 @@ import BookContent from "../views/partial/BookContent";
 import AllTags from "../views/AllTags";
 import SameTag from "../views/partial/SameTag";
 
-export default new VueRouter({
+const router = new VueRouter({
 	mode: "history",
 	routes: [
 		{
@@ -19,6 +19,7 @@ export default new VueRouter({
 		},
 		{
 			path: "/home",
+			name: 'home',
 			component: Home,
 			meta: {
 				keepAlive: true,
@@ -61,6 +62,7 @@ export default new VueRouter({
 		},
 		{
 			path: "/home/:id",
+			name: 'blog',
 			component: TechBlogContent,
 			props: true,
 			meta: {
@@ -69,6 +71,7 @@ export default new VueRouter({
 		},
 		{
 			path: "/book/:id",
+			name: "book",
 			component: BookContent,
 			// 会直接挂到Vue实例属性，即$attrs上
 			props: true,
@@ -86,10 +89,24 @@ export default new VueRouter({
 		{
 			path: "/alltags/:tag",
 			component: SameTag,
-			props:true,
+			props: true,
 			meta: {
 				keepAlive: false,
 			},
 		},
 	],
 });
+
+router.beforeEach((to, from, next) => {
+	console.log("路由守卫", to, from);
+	if (to.meta.isAuth) {
+		if (localStorage.getItem("school") === "some") {
+			next();
+		} else {
+			alert("err");
+		}
+	} else {
+		next();
+	}
+});
+export default router;

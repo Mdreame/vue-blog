@@ -4,11 +4,11 @@
 		<Header :class="toggle ? 'show' : 'hide'"> </Header>
 		<main class="showScrollBar" :class="toggle ? '' : 'normal-body'">
 			<!-- 页面组件 -->
-        <!-- 保证页面不重新刷新 -->
-				<keep-alive>
-					<router-view v-if="$route.meta.keepAlive"></router-view>
-				</keep-alive>
-					<router-view v-if="!$route.meta.keepAlive"></router-view>
+			<!-- 保证页面不重新刷新 -->
+			<keep-alive>
+				<router-view v-if="$route.meta.keepAlive"></router-view>
+			</keep-alive>
+			<router-view v-if="!$route.meta.keepAlive"></router-view>
 		</main>
 		<button v-show="isShow" class="btn-backtop" @click="toTop">
 			<svg
@@ -54,6 +54,7 @@ import Header from "./components/Header";
 
 export default {
 	name: "App",
+	components: { Header },
 	data() {
 		return {
 			toggle: false,
@@ -63,10 +64,6 @@ export default {
 			topOffset: 0,
 			isShow: false,
 		};
-	},
-
-	components: {
-		Header,
 	},
 	methods: {
 		//屏幕超出200显示回到顶部按钮
@@ -86,14 +83,19 @@ export default {
 			document.body.scrollTo({ top: 0, behavior: "smooth" });
 		},
 	},
-	mounted() {
-		//加上true才有用
-		window.addEventListener("scroll", this.showToTopBtn, true);
-
+	async created() {
+		console.log("app created");
+		await this.$store.dispatch("deliverBooks");
+		await this.$store.dispatch("deliverTechBlogs");
 		
 	},
-	destroyed() {
-		console.log("destroyed");
+	mounted() {
+		console.log("app mounted");
+		//超出设定高度显示回到顶部按钮，加上true才有用
+		window.addEventListener("scroll", this.showToTopBtn, true);
+		
+		this.$bus.$emit("deliver", this.$store.state.allTagObjs)
+
 	},
 };
 </script>

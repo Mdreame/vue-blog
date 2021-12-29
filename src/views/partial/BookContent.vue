@@ -9,7 +9,9 @@
 				extract
 			}}</span>
 		</div>
-		<Tag :tags="tags"></Tag>
+		<!-- <Tag :tags="tags"></Tag> -->
+		<Tag></Tag>
+
 		<div class="markdown-body">
 			<VueMarkdown
 				:source="bookContent"
@@ -34,7 +36,7 @@ export default {
 			comment: "",
 			extract: "",
 			coverUrl: "",
-			tags: [],
+			tags: {},
 			createdAt: "",
 			bookContent: "",
 		};
@@ -48,16 +50,11 @@ export default {
 					query: `{
 						getBook(_id: "${id}"){
                             name
-                            category
                             extract
                             comment
                             content
                             createdAt
-                            classify
                             tags
-                            author {
-                                name
-                            }
                             coverUrl
 				        }
 				    }`,
@@ -72,9 +69,18 @@ export default {
 					this.comment = result.comment;
 					this.extract = result.extract;
 					this.coverUrl = result.coverUrl;
-					this.tags = result.tags;
 					this.createdAt = result.createdAt;
 					this.bookContent = result.content;
+
+					this.tags = {};
+					result.tags.forEach((item) => {
+						let tagItem = this.$store.state.allTagObjs[item];
+						if (tagItem) {
+							this.tags[item] = tagItem;
+						}
+					});
+					console.log(this.tags);
+					this.$bus.$emit("deliver", this.tags)
 				})
 				.catch((error) => console.log(error))
 				.finally(() => (this.loading = false));

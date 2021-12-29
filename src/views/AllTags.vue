@@ -1,3 +1,4 @@
+script
 <template>
 	<div>
 		<h2 class="title">All Tags</h2>
@@ -7,9 +8,39 @@
 
 <script>
 import Tag from "./partial/Tag";
+import { mapState } from "vuex";
 export default {
-	components: {
-		Tag,
+	data() {
+		return {
+			tags: [],
+		};
+	},
+
+	components: { Tag },
+	computed: {
+		...mapState(["allTagObjs"]),
+	},
+	created() {
+		console.log("alltag.vue created");
+	},
+	updated() {
+		console.log("updated");
+		
+		this.$bus.$emit("deliver", this.tags);
+		this.tags = this.allTagObjs;
+	},
+
+	mounted() {
+		this.tags = this.allTagObjs;
+		console.log("AllTag.vue mounted");
+		console.log("this.tags", this.tags);
+		this.$bus.$emit("deliver", this.tags);
+	},
+	activated() {
+		console.log("activated");
+		this.$bus.$emit("deliver", this.tags);
+		
+		// this.tags = this.allTagObjs;
 	},
 };
 </script>

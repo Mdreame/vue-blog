@@ -50,23 +50,20 @@
 </template>
 
 <script>
-const getBlogList = `{
-	getBlogList{
-    	id
-	  	name
-    	description
-    	createdAt
-	}
-}`;
+import { mapState } from "vuex";
+
+
 
 export default {
 	data() {
 		return {
 			total: 0,
-			techBlogs: [],
 			isActive: false,
 			ArchiveDate: [],
 		};
+	},
+	computed: {
+		...mapState(["techBlogs"]),
 	},
 	methods: {
 		transTime(time) {
@@ -76,26 +73,17 @@ export default {
 			this.isActive = !this.isActive;
 		},
 	},
+	created(){
+		console.log("home created");
+
+	},
 	mounted() {
-		this.$axios({
-			url: `https://mdreame.life/graphql`, // 后端的接口地址
-			method: "get",
-			params: { query: getBlogList },
-			dataType: "json",
-		})
-			.then((res) => {
-				this.techBlogs = res.data.data.getBlogList;
-				this.total =
-					this.techBlogs.length > 0 ? this.techBlogs.length : 0;
-			})
-			.catch((error) => console.log(error));
+		console.log("home mounted");
 	},
 };
 </script>
 
 <style lang="scss" scoped>
-
-
 .blog-total {
 	margin-bottom: 2rem;
 	border-bottom: 2px solid #c1c1c1;
@@ -171,7 +159,7 @@ export default {
 		position: relative;
 		padding-left: 2rem;
 
-		&:not(:last-child)::before{
+		&:not(:last-child)::before {
 			content: "";
 			width: 8px;
 			height: 36px;

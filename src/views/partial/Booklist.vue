@@ -1,24 +1,18 @@
 <template>
 	<div>
 		<h1>我的“阅历”</h1>
-		<ul class="css-19mzlz1">
-			<li
-				v-for="book in books"
-				:key="book.id"
-				class="css-1j5kdlv-BookItem e7sta0n6"
-			>
+		<ul>
+			<li v-for="book in books" :key="book.id">
 				<div>
-					<!-- router-link :to="`/home/${techBlog.id}`" -->
 					<router-link :to="`/book/${book.id}`"
 						><img
 							:src="book.coverUrl"
 							:alt="book.name"
 							:title="book.name"
-							class="css-1lgrm10-BookCover e7sta0n4"
 					/></router-link>
 					<div class="book-info">
 						<router-link :to="`/book/${book.id}`"
-							><h4 class="css-1vc8y3g-BookName e7sta0n3">
+							><h4>
 								{{ book.name }}
 							</h4>
 						</router-link>
@@ -26,7 +20,7 @@
 						<p class="book-category">{{ book.classify }}</p>
 					</div>
 				</div>
-				<div class="css-1w4lq8o-BookComment e7sta0n0">
+				<div>
 					{{ book.comment }}
 				</div>
 			</li>
@@ -35,45 +29,16 @@
 </template>
 
 <script>
-const getBookList = `{
-            getBookList{
-                id
-                name
-                category
-                extract
-                comment
-                createdAt
-                classify
-                tags
-                author {
-                  name
-                }
-                coverUrl
-            }
-        }`;
+import { mapState } from "vuex";
+// import { mapAction} from "vuex";
 
 export default {
 	name: "BookList",
-	data() {
-		return {
-			books: [],
-		};
+	computed: {
+		...mapState(["books"]),
 	},
 	mounted() {
-		console.log("store:", this.$store.state);
-
-		this.$axios({
-			url: `http://localhost:9000/graphql`, // 后端的接口地址
-			method: "get",
-			params: { query: getBookList },
-			dataType: "json",
-		})
-			.then((res) => {
-				this.books = res.data.data.getBookList;
-				this.total = this.books.length > 0 ? this.books.length : 0;
-				console.log(this.books);
-			})
-			.catch((error) => console.log(error));
+		console.log("Booklist.vue from store:", this.books);
 	},
 };
 </script>
