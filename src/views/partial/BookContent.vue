@@ -1,20 +1,22 @@
 <template>
 	<div v-cloak>
 		<h3 class="title">
-			{{ name }}<span class="createdAt">{{ transTime(createdAt) }}</span>
+			{{ book.name
+			}}<span class="createdAt">{{ transTime(book.createdAt) }}</span>
 		</h3>
-		<p class="comment">{{ comment }}</p>
+		<p class="comment">{{ book.comment }}</p>
 		<div class="cover">
-			<img :src="coverUrl" :alt="name" /><span class="extract">{{
-				extract
-			}}</span>
+			<img :src="book.coverUrl" :alt="book.name" /><span
+				class="extract"
+				>{{ book.extract }}</span
+			>
 		</div>
 		<!-- <Tag :tags="tags"></Tag> -->
 		<Tag></Tag>
 
 		<div class="markdown-body">
 			<VueMarkdown
-				:source="bookContent"
+				:source="book.bookContent"
 				class="bookContent"
 			></VueMarkdown>
 		</div>
@@ -31,14 +33,17 @@ export default {
 	components: { VueMarkdown, Tag },
 	data() {
 		return {
-			name: "",
-			category: "",
-			comment: "",
-			extract: "",
-			coverUrl: "",
-			tags: {},
-			createdAt: "",
-			bookContent: "",
+			book: {
+				id: "",
+				name: "",
+				category: "",
+				comment: "",
+				extract: "",
+				coverUrl: "",
+				tags: {},
+				createdAt: "",
+				bookContent: "",
+			},
 		};
 	},
 	methods: {
@@ -49,6 +54,7 @@ export default {
 				params: {
 					query: `{
 						getBook(_id: "${id}"){
+							id
                             name
                             extract
                             comment
@@ -64,23 +70,33 @@ export default {
 				.then((res) => {
 					let result = res.data.data.getBook;
 
-					this.name = result.name;
-					this.category = result.category;
-					this.comment = result.comment;
-					this.extract = result.extract;
-					this.coverUrl = result.coverUrl;
-					this.createdAt = result.createdAt;
-					this.bookContent = result.content;
+					this.book.id = result.id;
+					this.book.name = result.name;
+					this.book.category = result.category;
+					this.book.comment = result.comment;
+					this.book.extract = result.extract;
+					this.book.coverUrl = result.coverUrl;
+					this.book.createdAt = result.createdAt;
+					this.book.bookContent = result.content;
 
-					this.tags = {};
+					this.book.tags = {};
 					result.tags.forEach((item) => {
 						let tagItem = this.$store.state.allTagObjs[item];
 						if (tagItem) {
-							this.tags[item] = tagItem;
+							this.book.tags[item] = tagItem;
 						}
 					});
-					console.log(this.tags);
-					this.$bus.$emit("deliver", this.tags)
+					//本地存储
+					// localStorage.setItem(
+					// 	this.book.id,
+					// 	JSON.stringify(this.book)
+					// );
+					sessionStorage.setItem(
+						this.book.id,
+						JSON.stringify(this.book)
+					);
+					console.log(this.book.tags);
+					this.$bus.$emit("deliver", this.book.tags);
 				})
 				.catch((error) => console.log(error))
 				.finally(() => (this.loading = false));
@@ -90,7 +106,15 @@ export default {
 		},
 	},
 	mounted() {
-		this.getBookById(this.$attrs.id);
+		// let localStore = localStorage.getItem(this.$attrs.id);
+		let localStore = sessionStorage.getItem(this.$attrs.id);
+		if (localStore) {
+			console.log("读取缓存");
+			this.book = JSON.parse(localStore);
+			this.$bus.$emit("deliver", this.book.tags);
+		} else {
+			this.getBookById(this.$attrs.id);
+		}
 	},
 };
 </script>

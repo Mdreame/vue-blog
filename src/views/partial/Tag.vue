@@ -24,6 +24,8 @@ export default {
 	props: ["allTags"],
 	methods: {
 		updateData(newValue) {
+            console.log("收到数据", newValue);
+            
 			console.log("开始更新");
 			this.tags = newValue;
 		},

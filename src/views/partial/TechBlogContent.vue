@@ -1,12 +1,13 @@
 <template>
 	<div v-cloak>
-		<h1 class="title">{{ name }}</h1>
+		<h1 class="title">{{ blog.name }}</h1>
 		<p class="title-detail" v-cloak>
-			<span>分类：<span class="category">{{ category }}</span></span
-			><span class="createdAt">{{ transTime(createdAt) }}</span>
+			<span
+				>分类：<span class="category">{{ blog.category }}</span></span
+			><span class="createdAt">{{ transTime(blog.createdAt) }}</span>
 		</p>
 		<div class="markdown-body">
-			<VueMarkdown :source="blogContent"></VueMarkdown>
+			<VueMarkdown :source="blog.blogContent"></VueMarkdown>
 		</div>
 	</div>
 </template>
@@ -20,11 +21,14 @@ export default {
 	components: { VueMarkdown },
 	data() {
 		return {
-			name: "",
-			category: "",
-			description: "",
-			createdAt: "",
-			blogContent: "",
+			blog: {
+				id: "",
+				name: "",
+				category: "",
+				description: "",
+				createdAt: "",
+				blogContent: "",
+			},
 		};
 	},
 	methods: {
@@ -35,6 +39,7 @@ export default {
 				params: {
 					query: `{
 						getBlog(_id: "${id}"){
+							id
 							name
 							category
 							description
@@ -51,11 +56,17 @@ export default {
 					let result = res.data.data.getBlog;
 					// console.log(result);
 
-					this.name = result.name;
-					this.description = result.description;
-					this.category = result.category;
-					this.createdAt = result.createdAt;
-					this.blogContent = result.content;
+					this.blog.id = result.id;
+					this.blog.name = result.name;
+					this.blog.description = result.description;
+					this.blog.category = result.category;
+					this.blog.createdAt = result.createdAt;
+					this.blog.blogContent = result.content;
+
+					localStorage.setItem(
+						this.blog.id,
+						JSON.stringify(this.blog)
+					);
 				})
 				.catch((error) => console.log(error))
 				.finally(() => (this.loading = false));
@@ -67,11 +78,14 @@ export default {
 		},
 	},
 	mounted() {
-		console.log(this);
+		let cacheStore = localStorage.getItem(this.$attrs.id);
+		if (cacheStore) {
+			this.blog = JSON.parse(cacheStore);
+		} else {
 		
-		this.getBlogById(this.$attrs.id);
+			this.getBlogById(this.$attrs.id);
+		}
 	},
-
 };
 </script>
 

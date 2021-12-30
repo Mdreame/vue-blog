@@ -33,11 +33,25 @@ const getBlogList = `{
 	}
 }`;
 
+const getAllMusics = `{
+        getAllMusics{
+            id
+            name
+            url
+            singer
+            publishedAt
+            albumnCover
+            single
+            comment
+            style
+        }
+}`;
+
 //按标签名分组，返回文章id和name
 function groupByTags(allTagObjs, tags) {
-	let arr = tags.reduce((acc, tag) => {
+	tags.reduce((acc, tag) => {
 		let tagItemArr = tag.tags;
-		if (tagItemArr.length > 0) {
+		if (tagItemArr !== undefined && tagItemArr.length > 0) {
 			//遍历标签数组
 			tagItemArr.map((item) => {
 				// console.log(item);
@@ -54,7 +68,7 @@ function groupByTags(allTagObjs, tags) {
 		}
 		return acc;
 	}, allTagObjs);
-	console.log("arr ===> ", arr);
+	// console.log("arr ===> ", arr);
 }
 const store = new Vuex.Store({
 	state: {
@@ -62,8 +76,9 @@ const store = new Vuex.Store({
 		allTagObjs: {},
 		books: [],
 		techBlogs: [],
-        //sameTags缓存
-        cache: {}
+		musics: [],
+		//sameTags缓存
+		cache: {},
 	},
 	mutations: {
 		deliverBooks(state, books) {
@@ -76,12 +91,16 @@ const store = new Vuex.Store({
 			state.techBlogs = techBlogs;
 			groupByTags(state.allTagObjs, techBlogs);
 		},
+		deliverMusics(state, musics) {
+			//数据传送给home
+            
+			state.musics = musics;
+			groupByTags(state.allTagObjs, musics);
+		},
 	},
 	actions: {
-        
 		// 将图书列表传给mutations处理
 		deliverBooks({ commit }) {
-            
 			//请求图书列表--Booklist.vue
 			axios({
 				url: `http://localhost:9000/graphql`, // 后端的接口地址
@@ -110,6 +129,22 @@ const store = new Vuex.Store({
 			})
 				.then((res) => {
 					commit("deliverTechBlogs", res.data.data.getBlogList);
+				})
+				.catch((error) => console.log(error));
+		},
+
+		deliverMusics({ commit }) {
+			//请求博客列表
+			axios({
+				url: `http://localhost:9000/graphql`,
+				method: "get",
+				params: { query: getAllMusics },
+				dataType: "json",
+			})
+				.then((res) => {
+					console.log("res.data.data.getAllMusics",res.data.data.getAllMusics);
+
+					commit("deliverMusics", res.data.data.getAllMusics);
 				})
 				.catch((error) => console.log(error));
 		},

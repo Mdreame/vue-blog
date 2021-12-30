@@ -83,18 +83,19 @@ export default {
 			document.body.scrollTo({ top: 0, behavior: "smooth" });
 		},
 	},
-	async created() {
+	created() {
 		console.log("app created");
-		await this.$store.dispatch("deliverBooks");
-		await this.$store.dispatch("deliverTechBlogs");
-		
+		this.$store.dispatch("deliverBooks");
+		this.$store.dispatch("deliverTechBlogs");
+		this.$store.dispatch("deliverMusics");
 	},
 	mounted() {
 		console.log("app mounted");
 		//超出设定高度显示回到顶部按钮，加上true才有用
 		window.addEventListener("scroll", this.showToTopBtn, true);
-		
-		this.$bus.$emit("deliver", this.$store.state.allTagObjs)
+
+		this.$bus.$emit("deliver", this.$store.state.allTagObjs);
+		this.$bus.$emit("reloadMusicContent", this.$store.state.musics);
 
 	},
 };

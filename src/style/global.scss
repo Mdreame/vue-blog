@@ -1,4 +1,15 @@
 $text-color: #444;
+:root {
+	--colsNum-5: repeat(5, 1fr);
+	--colsNum-4: repeat(4, 1fr);
+	--colsNum-3: repeat(3, 1fr);
+	--colsNum-2: repeat(2, 1fr);
+	--colsNum-1: 1fr;
+
+	--albumnContainerWidth: 300px;
+	--albumnCoverWidth: 160px;
+	--albumnCDWidth: 60px;
+}
 
 * {
 	margin: 0;
@@ -46,17 +57,15 @@ body {
 	background: #ededed;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-weight: 400;
+}
 
-$--colsNum-5: repeat(5, 1fr);
-$--colsNum-4: repeat(4, 1fr);
-$--colsNum-3: repeat(3, 1fr);
-$--colsNum-2: repeat(2, 1fr);
-$--colsNum-1: 1fr;
-
-$--albumnContainerWidth: 300px;
-$--albumnCoverWidth: 160px;
-$--albumnCDWidth: 60px;
-
-h1, h2, h3, h4, h5, h6 {
-    font-weight: 400;
+a {
+	text-decoration: none;
 }

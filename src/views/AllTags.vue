@@ -25,9 +25,8 @@ export default {
 	},
 	updated() {
 		console.log("updated");
-		
-		this.$bus.$emit("deliver", this.tags);
 		this.tags = this.allTagObjs;
+		this.$bus.$emit("deliver", this.tags);
 	},
 
 	mounted() {

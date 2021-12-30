@@ -7,6 +7,7 @@ import Movie from "../views/Movie";
 import Music from "../views/Music";
 import TechBlogContent from "../views/partial/TechBlogContent";
 import BookContent from "../views/partial/BookContent";
+import MusicContent from "../views/partial/MusicContent";
 import AllTags from "../views/AllTags";
 import SameTag from "../views/partial/SameTag";
 
@@ -73,6 +74,16 @@ const router = new VueRouter({
 			path: "/book/:id",
 			name: "book",
 			component: BookContent,
+			// 会直接挂到Vue实例属性，即$attrs上
+			props: true,
+			meta: {
+				keepAlive: false,
+			},
+		},
+		{
+			path: "/music/:id",
+			name: "music",
+			component: MusicContent,
 			// 会直接挂到Vue实例属性，即$attrs上
 			props: true,
 			meta: {
